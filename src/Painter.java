@@ -93,7 +93,7 @@ public class Painter {
     private void getPixelNeighborhood(int x, int y) {
         LinkedList<Pixel> fila = new LinkedList<>();
 
-        String[] positions = {"top", "bottom", "left", "right"};
+        String[] positions = {"bottom", "right", "left", "top"};
         for (String position: positions) {
             Pixel pixel = getPixelNeighbor(x, y, position);
             if(pixel != null) {
@@ -105,10 +105,9 @@ public class Painter {
             Pixel pixel = fila.pop();
             if(pixel.getRGB() == selectedRgb) {
                 paintedImg.setRGB(pixel.getX(), pixel.getY(), newRgb);
-                getPixelNeighborhood(pixel.getX(), pixel.getY());
-
                 exportPartial(paintedImg, paintCount - 1);
                 paintCount++;
+                getPixelNeighborhood(pixel.getX(), pixel.getY());
             }
         } while(!fila.isEmpty());
     }
