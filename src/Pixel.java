@@ -28,4 +28,8 @@ public class Pixel {
     public int getY() {
         return this.y;
     }
+
+    public String getCoordinates() {
+        return this.x + ":" + this.y;
+    }
 }

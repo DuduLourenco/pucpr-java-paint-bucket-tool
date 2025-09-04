@@ -1,9 +1,10 @@
+import EListas.EArrayList;
+import EListas.EQueue;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Objects;
 
 public class Painter {
@@ -14,7 +15,7 @@ public class Painter {
     private int selectedRgb;
 
     private int paintCount = 1;
-    private ArrayList<Pixel> pixelsFilled = new ArrayList<>();
+    private final EArrayList<String> pixelsFilled = new EArrayList<>();
 
     public Painter() {
         try {
@@ -95,20 +96,21 @@ public class Painter {
     }
 
     private void getPixelNeighborhood(int x, int y) {
-        LinkedList<Pixel> fila = new LinkedList<>();
+        EQueue<Pixel> fila = new EQueue<>();
 
         String[] positions = {"bottom", "right", "left", "top"};
         for (String position: positions) {
             Pixel pixel = getPixelNeighbor(x, y, position);
             if(pixel != null) {
-                fila.add(pixel);
+                fila.enqueue(pixel);
             }
         }
 
         do {
-            Pixel pixel = fila.pop();
-            Pixel pixelFilled = pixelsFilled.stream().filter(p -> p.getX() == pixel.getX() && p.getY() == pixel.getY()).findFirst().orElse(null);
-            if(pixel.getRGB() == selectedRgb && pixelFilled == null) {
+            Pixel pixel = fila.dequeue();
+            boolean alreadyFilled = pixelsFilled.contains(pixel.getX()+":"+pixel.getY());
+
+            if(pixel.getRGB() == selectedRgb && !alreadyFilled) {
                 paintedImg.setRGB(pixel.getX(), pixel.getY(), newRgb);
 
                 if(paintCount % 10 == 0) {
@@ -116,7 +118,7 @@ public class Painter {
                 }
 
                 paintCount++;
-                pixelsFilled.add(pixel);
+                pixelsFilled.add(pixel.getCoordinates());
                 getPixelNeighborhood(pixel.getX(), pixel.getY());
             }
         } while(!fila.isEmpty());

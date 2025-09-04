@@ -1,6 +1,7 @@
 package EListas;
 
 import java.util.Objects;
+import java.util.function.Consumer;
 
 public class EArrayList<T> {
     private T[] data;
@@ -108,7 +109,7 @@ public class EArrayList<T> {
     }
 
     public int indexOf(T element) {
-        for (int i = 0; i <= size; i++) {
+        for (int i = 0; i < size; i++) {
             if(Objects.equals(this.data[i], element)) {
                 return i;
             }
