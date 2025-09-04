@@ -6,15 +6,17 @@ import java.util.LinkedList;
 import java.util.Objects;
 
 public class Painter {
-    private BufferedImage originalImg;
+    private final BufferedImage originalImg;
     private BufferedImage paintedImg;
 
     private int newRgb;
     private int selectedRgb;
 
+    private int paintCount = 1;
+
     public Painter() {
         try {
-            File f = new File("src/input.png");
+            File f = new File("src/input2.png");
             this.originalImg = ImageIO.read(f);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -30,10 +32,10 @@ public class Painter {
         }
     }
 
-    public void exportPartial(int index) {
+    public void exportPartial(BufferedImage image, int index) {
         try {
             File out = new File("./src/output/output" + index + ".png");
-            ImageIO.write(this.paintedImg, "png", out);
+            ImageIO.write(image, "png", out);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -57,6 +59,7 @@ public class Painter {
         paintedImg.setRGB(selectedX, selectedY, newPixel.getRGB());
         getPixelNeighborhood(selectedX, selectedY);
 
+        System.out.printf("Terminou com %d pintadas", paintCount);
         this.export();
     }
 
@@ -70,13 +73,13 @@ public class Painter {
             isOut = posY < 0;
         } else if(Objects.equals(pos, "bottom")) {
             posY = y + 1;
-            isOut = posY > this.originalImg.getHeight();
+            isOut = posY > this.originalImg.getHeight() - 1;
         } else if(Objects.equals(pos, "left")) {
             posX = x - 1;
             isOut = posX < 0;
         } else if(Objects.equals(pos, "right")) {
             posX = x + 1;
-            isOut = posX > this.originalImg.getWidth();
+            isOut = posX > this.originalImg.getWidth() - 1;
         }
 
         if(isOut) {
@@ -90,7 +93,7 @@ public class Painter {
     private void getPixelNeighborhood(int x, int y) {
         LinkedList<Pixel> fila = new LinkedList<>();
 
-        String[] positions = {"pos", "bottom", "left", "right"};
+        String[] positions = {"top", "bottom", "left", "right"};
         for (String position: positions) {
             Pixel pixel = getPixelNeighbor(x, y, position);
             if(pixel != null) {
@@ -103,6 +106,9 @@ public class Painter {
             if(pixel.getRGB() == selectedRgb) {
                 paintedImg.setRGB(pixel.getX(), pixel.getY(), newRgb);
                 getPixelNeighborhood(pixel.getX(), pixel.getY());
+
+                exportPartial(paintedImg, paintCount - 1);
+                paintCount++;
             }
         } while(!fila.isEmpty());
     }
