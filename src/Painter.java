@@ -2,6 +2,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Objects;
 
@@ -13,6 +14,7 @@ public class Painter {
     private int selectedRgb;
 
     private int paintCount = 1;
+    private ArrayList<Pixel> pixelsFilled = new ArrayList<>();
 
     public Painter() {
         try {
@@ -57,7 +59,9 @@ public class Painter {
         Pixel selectedPixel = new Pixel(selectedRgb);
 
         paintedImg.setRGB(selectedX, selectedY, newPixel.getRGB());
+        exportPartial(paintedImg, paintCount - 1);
         getPixelNeighborhood(selectedX, selectedY);
+        exportPartial(paintedImg, paintCount - 1);
 
         System.out.printf("Terminou com %d pintadas", paintCount);
         this.export();
@@ -103,10 +107,16 @@ public class Painter {
 
         do {
             Pixel pixel = fila.pop();
-            if(pixel.getRGB() == selectedRgb) {
+            Pixel pixelFilled = pixelsFilled.stream().filter(p -> p.getX() == pixel.getX() && p.getY() == pixel.getY()).findFirst().orElse(null);
+            if(pixel.getRGB() == selectedRgb && pixelFilled == null) {
                 paintedImg.setRGB(pixel.getX(), pixel.getY(), newRgb);
-                exportPartial(paintedImg, paintCount - 1);
+
+                if(paintCount % 10 == 0) {
+                   exportPartial(paintedImg, paintCount - 1);
+                }
+
                 paintCount++;
+                pixelsFilled.add(pixel);
                 getPixelNeighborhood(pixel.getX(), pixel.getY());
             }
         } while(!fila.isEmpty());
