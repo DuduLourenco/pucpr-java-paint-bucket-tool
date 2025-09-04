@@ -27,3 +27,9 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+### Imagens de Output - resultado
+**/src/output/stack/
+**/src/output/queue/
+**/src/output-queue.png
+**/src/output-stack.png
