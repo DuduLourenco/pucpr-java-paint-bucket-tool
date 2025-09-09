@@ -92,7 +92,7 @@ public class QueuePainter extends Painter {
     private void getPixelNeighborhood(int x, int y) {
         EQueue<Pixel> fila = new EQueue<>();
 
-        String[] positions = {"bottom", "right", "left", "top"};
+        String[] positions = {"bottom", "right", "top", "left"};
         for (String position: positions) {
             Pixel pixel = getPixelNeighbor(x, y, position);
             if(pixel != null) {

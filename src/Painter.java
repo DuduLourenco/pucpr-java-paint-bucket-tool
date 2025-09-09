@@ -8,7 +8,7 @@ public abstract class Painter {
 
     public Painter() {
         try {
-            File f = new File("src/input2.png");
+            File f = new File("src/input4.png");
             this.originalImg = ImageIO.read(f);
         } catch (IOException e) {
             throw new RuntimeException(e);

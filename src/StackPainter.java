@@ -14,11 +14,12 @@ public class StackPainter extends Painter {
     private int newRgb;
     private int selectedRgb;
 
-    private int paintCount = 1;
+    private int paintCount = 0;
     private final EArrayList<String> pixelsFilled = new EArrayList<>();
 
     public StackPainter() {
         super();
+        this.paintedImg = this.originalImg;
     }
 
     public void export() {
@@ -48,13 +49,13 @@ public class StackPainter extends Painter {
             throw new IllegalStateException("Invalid Y");
         }
 
-        this.paintedImg = this.originalImg;
-
         this.newRgb = newPixel.getRGB();
         this.selectedRgb = originalImg.getRGB(selectedX, selectedY);
 
         paintedImg.setRGB(selectedX, selectedY, newPixel.getRGB());
-        exportPartial(paintedImg, paintCount - 1);
+        exportPartial(paintedImg, paintCount);
+        paintCount += 1;
+
         getPixelNeighborhood(selectedX, selectedY);
         exportPartial(paintedImg, paintCount - 1);
 
@@ -72,13 +73,13 @@ public class StackPainter extends Painter {
             isOut = posY < 0;
         } else if(Objects.equals(pos, "bottom")) {
             posY = y + 1;
-            isOut = posY > this.originalImg.getHeight() - 1;
+            isOut = posY > this.originalImg.getHeight() - 1;//TODO: Verificar necessidade da subtração -1
         } else if(Objects.equals(pos, "left")) {
             posX = x - 1;
             isOut = posX < 0;
         } else if(Objects.equals(pos, "right")) {
             posX = x + 1;
-            isOut = posX > this.originalImg.getWidth() - 1;
+            isOut = posX > this.originalImg.getWidth() - 1;//TODO: Verificar necessidade da subtração -1
         }
 
         if(isOut) {
@@ -92,7 +93,7 @@ public class StackPainter extends Painter {
     private void getPixelNeighborhood(int x, int y) {
         EStack<Pixel> pilha = new EStack<>();
 
-        String[] positions = {"bottom", "right", "left", "top"};
+        String[] positions = {"bottom", "right", "top", "left"};
         for (String position: positions) {
             Pixel pixel = getPixelNeighbor(x, y, position);
             if(pixel != null) {
@@ -102,11 +103,13 @@ public class StackPainter extends Painter {
 
         do {
             Pixel pixel = pilha.pop();
-            boolean alreadyFilled = pixelsFilled.contains(pixel.getX()+":"+pixel.getY());
+            boolean alreadyFilled = pixelsFilled.contains(pixel.getCoordinates());
 
             if(pixel.getRGB() == selectedRgb && !alreadyFilled) {
                 paintedImg.setRGB(pixel.getX(), pixel.getY(), newRgb);
 
+                //TODO: testar com imagens que não possuem tamanho multiplo de 10
+                //TODO: testar pintando figuras com menos de 10 pixels
                 if(paintCount % 10 == 0) {
                    exportPartial(paintedImg, paintCount - 1);
                 }
