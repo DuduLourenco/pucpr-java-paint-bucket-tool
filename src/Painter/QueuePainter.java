@@ -1,6 +1,7 @@
+package Painter;
+
 import EListas.EArrayList;
 import EListas.EQueue;
-import EListas.EStack;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -8,23 +9,22 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
-public class StackPainter extends Painter {
+public class QueuePainter extends Painter {
     private BufferedImage paintedImg;
 
     private int newRgb;
     private int selectedRgb;
 
-    private int paintCount = 0;
+    private int paintCount = 1;
     private final EArrayList<String> pixelsFilled = new EArrayList<>();
 
-    public StackPainter() {
+    public QueuePainter() {
         super();
-        this.paintedImg = this.originalImg;
     }
 
     public void export() {
         try {
-            File out = new File("./src/output-stack.png");
+            File out = new File("./src/output/queue.png");
             ImageIO.write(this.paintedImg, "png", out);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -33,7 +33,7 @@ public class StackPainter extends Painter {
 
     public void exportPartial(BufferedImage image, int index) {
         try {
-            File out = new File("./src/output/stack/output" + index + ".png");
+            File out = new File("./src/output/queue/output" + index + ".png");
             ImageIO.write(image, "png", out);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -49,13 +49,14 @@ public class StackPainter extends Painter {
             throw new IllegalStateException("Invalid Y");
         }
 
+        this.paintedImg = this.originalImg;
+
         this.newRgb = newPixel.getRGB();
         this.selectedRgb = originalImg.getRGB(selectedX, selectedY);
+        Pixel selectedPixel = new Pixel(selectedRgb);
 
         paintedImg.setRGB(selectedX, selectedY, newPixel.getRGB());
-        exportPartial(paintedImg, paintCount);
-        paintCount += 1;
-
+        exportPartial(paintedImg, paintCount - 1);
         getPixelNeighborhood(selectedX, selectedY);
         exportPartial(paintedImg, paintCount - 1);
 
@@ -73,13 +74,13 @@ public class StackPainter extends Painter {
             isOut = posY < 0;
         } else if(Objects.equals(pos, "bottom")) {
             posY = y + 1;
-            isOut = posY > this.originalImg.getHeight() - 1;//TODO: Verificar necessidade da subtração -1
+            isOut = posY > this.originalImg.getHeight() - 1;
         } else if(Objects.equals(pos, "left")) {
             posX = x - 1;
             isOut = posX < 0;
         } else if(Objects.equals(pos, "right")) {
             posX = x + 1;
-            isOut = posX > this.originalImg.getWidth() - 1;//TODO: Verificar necessidade da subtração -1
+            isOut = posX > this.originalImg.getWidth() - 1;
         }
 
         if(isOut) {
@@ -91,25 +92,23 @@ public class StackPainter extends Painter {
     }
 
     private void getPixelNeighborhood(int x, int y) {
-        EStack<Pixel> pilha = new EStack<>();
+        EQueue<Pixel> fila = new EQueue<>();
 
         String[] positions = {"bottom", "right", "top", "left"};
         for (String position: positions) {
             Pixel pixel = getPixelNeighbor(x, y, position);
             if(pixel != null) {
-                pilha.push(pixel);
+                fila.enqueue(pixel);
             }
         }
 
         do {
-            Pixel pixel = pilha.pop();
-            boolean alreadyFilled = pixelsFilled.contains(pixel.getCoordinates());
+            Pixel pixel = fila.dequeue();
+            boolean alreadyFilled = pixelsFilled.contains(pixel.getX()+":"+pixel.getY());
 
             if(pixel.getRGB() == selectedRgb && !alreadyFilled) {
                 paintedImg.setRGB(pixel.getX(), pixel.getY(), newRgb);
 
-                //TODO: testar com imagens que não possuem tamanho multiplo de 10
-                //TODO: testar pintando figuras com menos de 10 pixels
                 if(paintCount % 10 == 0) {
                    exportPartial(paintedImg, paintCount - 1);
                 }
@@ -118,6 +117,6 @@ public class StackPainter extends Painter {
                 pixelsFilled.add(pixel.getCoordinates());
                 getPixelNeighborhood(pixel.getX(), pixel.getY());
             }
-        } while(!pilha.isEmpty());
+        } while(!fila.isEmpty());
     }
 }

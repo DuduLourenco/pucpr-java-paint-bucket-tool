@@ -1,3 +1,5 @@
+package Painter;
+
 public class Pixel {
     private int rgb;
     private int x;
