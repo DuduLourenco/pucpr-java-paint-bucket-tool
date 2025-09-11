@@ -3,14 +3,12 @@ import Painter.QueuePainter;
 import Painter.StackPainter;
 import Painter.ImagePlayer;
 
-import javax.swing.*;
-
 public class Program {
     public static void main(String[] args) {
-        int initialPosX = 56;
-        int initialPosY = 88;
+        int initialPosX = 32;
+        int initialPosY = 32;
 
-        Pixel newPixel = new Pixel(255, 255, 0, 0);
+        Pixel newPixel = new Pixel(255, 0, 3, 91);
 
         StackPainter stackPainter = new StackPainter();
         stackPainter.fill(initialPosX, initialPosY, newPixel);
