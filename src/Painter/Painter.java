@@ -25,19 +25,41 @@ public abstract class Painter {
         int posY = y;
         boolean isOut = false;
 
-        if(Objects.equals(pos, "top")) {
-            posY = y - 1;
-            isOut = posY < 0;
-        } else if(Objects.equals(pos, "bottom")) {
-            posY = y + 1;
-            isOut = posY > this.originalImg.getHeight() - 1;
-        } else if(Objects.equals(pos, "left")) {
-            posX = x - 1;
-            isOut = posX < 0;
-        } else if(Objects.equals(pos, "right")) {
-            posX = x + 1;
-            isOut = posX > this.originalImg.getWidth() - 1;
+        switch (pos) {
+            case "top":
+                posY = y - 1;
+                isOut = posY < 0;
+                break;
+
+            case "bottom":
+                posY = y + 1;
+                isOut = posY > this.originalImg.getHeight() - 1;
+                break;
+
+            case "left":
+                posX = x - 1;
+                isOut = posX < 0;
+                break;
+
+            case "right":
+                posX = x + 1;
+                isOut = posX > this.originalImg.getWidth() - 1;
+                break;
         }
+//
+//        if(Objects.equals(pos, "top")) {
+//            posY = y - 1;
+//            isOut = posY < 0;
+//        } else if(Objects.equals(pos, "bottom")) {
+//            posY = y + 1;
+//            isOut = posY > this.originalImg.getHeight() - 1;
+//        } else if(Objects.equals(pos, "left")) {
+//            posX = x - 1;
+//            isOut = posX < 0;
+//        } else if(Objects.equals(pos, "right")) {
+//            posX = x + 1;
+//            isOut = posX > this.originalImg.getWidth() - 1;
+//        }
 
         if(isOut) {
             return null;
