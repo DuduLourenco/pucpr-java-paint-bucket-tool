@@ -111,7 +111,7 @@ public class StackPainter extends Painter {
 
                 //TODO: testar com imagens que não possuem tamanho multiplo de 10
                 //TODO: testar pintando figuras com menos de 10 pixels
-                if(paintCount % 10 == 0) {
+                if(paintCount % 4 == 0) {
                    exportPartial(paintedImg, paintCount - 1);
                 }
 

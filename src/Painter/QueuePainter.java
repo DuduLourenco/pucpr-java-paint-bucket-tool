@@ -109,7 +109,7 @@ public class QueuePainter extends Painter {
             if(pixel.getRGB() == selectedRgb && !alreadyFilled) {
                 paintedImg.setRGB(pixel.getX(), pixel.getY(), newRgb);
 
-                if(paintCount % 10 == 0) {
+                if(paintCount % 4 == 0) {
                    exportPartial(paintedImg, paintCount - 1);
                 }
 
