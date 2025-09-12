@@ -12,6 +12,7 @@ public class QueuePainter extends Painter {
 
     public QueuePainter() {
         super();
+        this.clearFolder("./src/output/queue");
         this.paintedImg = this.originalImg;
     }
 

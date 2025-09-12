@@ -12,6 +12,7 @@ public class StackPainter extends Painter {
 
     public StackPainter() {
         super();
+        this.clearFolder("./src/output/stack");
         this.paintedImg = this.originalImg;
     }
 
