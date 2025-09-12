@@ -4,6 +4,10 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public abstract class Painter {
     protected BufferedImage originalImg;
@@ -45,20 +49,6 @@ public abstract class Painter {
                 isOut = posX > this.originalImg.getWidth() - 1;
                 break;
         }
-//
-//        if(Objects.equals(pos, "top")) {
-//            posY = y - 1;
-//            isOut = posY < 0;
-//        } else if(Objects.equals(pos, "bottom")) {
-//            posY = y + 1;
-//            isOut = posY > this.originalImg.getHeight() - 1;
-//        } else if(Objects.equals(pos, "left")) {
-//            posX = x - 1;
-//            isOut = posX < 0;
-//        } else if(Objects.equals(pos, "right")) {
-//            posX = x + 1;
-//            isOut = posX > this.originalImg.getWidth() - 1;
-//        }
 
         if(isOut) {
             return null;
@@ -86,6 +76,17 @@ public abstract class Painter {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+        }
+    }
+
+    public void clearFolder(String directoryPath) {
+        Path directory = Paths.get(directoryPath);
+        try(DirectoryStream<Path> stream = Files.newDirectoryStream(directory)) {
+            for (Path file : stream) {
+                Files.deleteIfExists(file);
+            }
+        } catch (IOException e) {
+            System.out.println("Ocorreu um erro ao deletar os arquivos!");
         }
     }
 }
