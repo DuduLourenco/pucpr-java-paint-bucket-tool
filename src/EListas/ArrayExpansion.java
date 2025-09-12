@@ -1,5 +1,7 @@
 package EListas;
 
+import java.util.Objects;
+
 public class ArrayExpansion <H> {
     protected H[] data;
     protected int capacity;
@@ -137,7 +139,7 @@ public class ArrayExpansion <H> {
 
     public boolean contains(H data) {
         for (int i = 0; i < this.data.length; i++) {
-            if (this.data[i] == data) {
+            if (Objects.equals(this.data[i], data)) {
                 return true;
             }
         }
