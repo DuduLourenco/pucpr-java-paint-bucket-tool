@@ -4,7 +4,6 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
 
 public abstract class Painter {
     protected BufferedImage originalImg;
@@ -80,7 +79,7 @@ public abstract class Painter {
     }
 
     protected void exportPartial(BufferedImage image, int index, String folderName) {
-        if(index % 96 == 0) {
+        if(index % 16 == 0) {
             try {
                 File out = new File("./src/output/" + folderName + "/output" + index + ".png");
                 ImageIO.write(image, "png", out);
