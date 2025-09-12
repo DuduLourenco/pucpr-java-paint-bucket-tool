@@ -69,7 +69,7 @@ public abstract class Painter {
     }
 
     protected void exportPartial(BufferedImage image, int index, String folderName , Boolean force) {
-        if(force || index % 8 == 0) {
+        if(force || index % 64 == 0) {
             try {
                 File out = new File("./src/output/" + folderName + "/output" + index + ".png");
                 ImageIO.write(image, "png", out);
