@@ -1,6 +1,6 @@
 package Painter;
 
-import EListas.EArrayList;
+import EListas.ArrayExpansion;
 import EListas.EStack;
 
 public class StackPainter extends Painter {
@@ -8,7 +8,7 @@ public class StackPainter extends Painter {
     private int selectedRgb;
 
     private int paintCount = 0;
-    private final EArrayList<String> pixelsFilled = new EArrayList<>();
+    private final ArrayExpansion<String> pixelsFilled = new ArrayExpansion<>();
 
     public StackPainter() {
         super();
