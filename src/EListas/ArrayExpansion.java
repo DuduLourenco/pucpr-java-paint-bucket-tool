@@ -145,6 +145,22 @@ public class ArrayExpansion <H> {
         return false;
     }
 
+    public boolean isEmpty() {
+        return this.data[0] == null;
+    }
+
+    public int size() {
+        int size = 0;
+        for (H datum : data) {
+            if (datum != null) {
+                size++;
+            } else {
+                return size;
+            }
+        }
+        return size;
+    }
+
     /**
      *
      * @param index Índice do array

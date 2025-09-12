@@ -1,18 +1,18 @@
 package Painter;
 
+import EListas.ArrayExpansion;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ImagePlayer extends JFrame {
     private JLabel stackLabel;
     private JLabel queueLabel;
-    private List<ImageIcon> stackImages;
-    private List<ImageIcon> queueImages;
+    private ArrayExpansion<ImageIcon> stackImages;
+    private ArrayExpansion<ImageIcon> queueImages;
     private int index = 0;
 
     public ImagePlayer(int width, int height) {
@@ -80,8 +80,8 @@ public class ImagePlayer extends JFrame {
         return resizedImage;
     }
 
-    private List<ImageIcon> loadImages(String folderPath) {
-        List<ImageIcon> list = new ArrayList<>();
+    private ArrayExpansion<ImageIcon> loadImages(String folderPath) {
+        ArrayExpansion<ImageIcon> list = new ArrayExpansion<>();
         File dir = new File(folderPath);
 
         if (dir.exists() && dir.isDirectory()) {
