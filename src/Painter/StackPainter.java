@@ -44,7 +44,7 @@ public class StackPainter extends Painter {
             if(pixel.getRGB() == selectedRgb) {
                 paintedImg.setRGB(x, y, newRgb);
                 paintCount += 1;
-                exportPartial(paintedImg, this.paintCount, "stack");
+                exportPartial(paintedImg, this.paintCount, "stack", false);
 
                 String[] positions = {"bottom", "right", "left", "top"};
                 for(String pos: positions) {
@@ -55,6 +55,7 @@ public class StackPainter extends Painter {
                 }
             }
         }
+        exportPartial(paintedImg, this.paintCount, "stack", true);
 
         System.out.printf("Terminou com %d pintadas\n", paintCount);
         this.export("stack");

@@ -45,7 +45,7 @@ public class QueuePainter extends Painter {
             if(pixel.getRGB() == selectedRgb) {
                 paintedImg.setRGB(x, y, newRgb);
                 paintCount += 1;
-                exportPartial(paintedImg, this.paintCount, "queue");
+                exportPartial(paintedImg, this.paintCount, "queue", false);
 
                 String[] positions = {"bottom", "right", "left", "top"};
                 for(String pos: positions) {
@@ -56,6 +56,7 @@ public class QueuePainter extends Painter {
                 }
             }
         }
+        exportPartial(paintedImg, this.paintCount, "queue", true);
 
         System.out.printf("Terminou com %d pintadas\n", paintCount);
         this.export("queue");
