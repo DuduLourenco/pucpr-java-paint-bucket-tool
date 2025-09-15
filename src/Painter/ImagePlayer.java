@@ -87,13 +87,24 @@ public class ImagePlayer extends JFrame {
         if (dir.exists() && dir.isDirectory()) {
             File[] files = dir.listFiles();
             if (files != null) {
-                java.util.Arrays.sort(files, (f1, f2) -> {
-                    String n1 = f1.getName().replaceAll("\\D+", ""); // remove tudo que não é número
-                    String n2 = f2.getName().replaceAll("\\D+", "");
-                    int num1 = n1.isEmpty() ? 0 : Integer.parseInt(n1);
-                    int num2 = n2.isEmpty() ? 0 : Integer.parseInt(n2);
-                    return Integer.compare(num1, num2);
-                });
+                for (int i = 0; i < files.length - 1; i++) {
+                    int min = i;
+                    for (int j = i + 1; j < files.length; j++) {
+                        int numJ = extractFirstNumber(files[j].getName());
+                        int numMin = extractFirstNumber(files[min].getName());
+
+                        if (numJ < numMin || (numJ == numMin &&
+                                files[j].getName().compareToIgnoreCase(files[min].getName()) < 0)) {
+                            min = j;
+                        }
+                    }
+                    if (min != i) {
+                        File tmp = files[i];
+                        files[i] = files[min];
+                        files[min] = tmp;
+                    }
+                }
+
                 for (File f : files) {
                     if (f.isFile() && f.getName().matches(".*\\.(png|jpg|jpeg|gif|bmp)$")) {
                         try {
@@ -110,5 +121,15 @@ public class ImagePlayer extends JFrame {
             }
         }
         return list;
+    }
+
+    private int extractFirstNumber(String filename) {
+        String digits = filename.replaceAll("\\D+", "");
+        if (digits.isEmpty()) return 0;
+        try {
+            return Integer.parseInt(digits);
+        } catch (NumberFormatException e) {
+            return Integer.MAX_VALUE; // em overflow, manda pro fim
+        }
     }
 }
